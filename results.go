@@ -30,6 +30,7 @@ func (r *RenderLayoutTemplateResult) Apply(req *revel.Request, resp *revel.Respo
 	}()
 
 	chunked := revel.Config.BoolDefault("results.chunked", false)
+	r.RenderTmpl[""] = r.Template
 	r.RenderArgs["ContentForItems"] = r.RenderTmpl
 
 	// If it's a HEAD request, throw away the bytes.
@@ -78,8 +79,6 @@ func (r *RenderLayoutTemplateResult) render(req *revel.Request, resp *revel.Resp
 }
 
 func (r *RenderLayoutTemplateResult) renderWithLayout(req *revel.Request, resp *revel.Response, wr io.Writer) {
-	r.RenderArgs["ContentForItems"].(map[string]revel.Template)[""] = r.Template
-
 	err := r.Layout.Render(wr, r.RenderArgs)
 	if err == nil {
 		return

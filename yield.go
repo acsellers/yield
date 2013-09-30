@@ -1,6 +1,3 @@
-// Yield provides a custom Controller for revel apps
-// that allows you to use layouts and output varying
-// templates from templates.
 package yield
 
 import (
@@ -78,14 +75,14 @@ func init() {
 	}
 }
 
-type LayoutController struct {
+type Controller struct {
 	*revel.Controller
 	RenderTmpl map[string]revel.Template
 	LayoutPath string
 	noLayout   bool
 }
 
-func (lc *LayoutController) Layout(s string) {
+func (lc *Controller) Layout(s string) {
 	if s == "" {
 		lc.noLayout = true
 	} else {
@@ -93,7 +90,7 @@ func (lc *LayoutController) Layout(s string) {
 	}
 }
 
-func (lc *LayoutController) Render(extraRenderArgs ...interface{}) revel.Result {
+func (lc *Controller) Render(extraRenderArgs ...interface{}) revel.Result {
 	// Get the calling function name.
 	_, _, line, ok := runtime.Caller(1)
 	if !ok {
@@ -124,7 +121,7 @@ func (lc *LayoutController) Render(extraRenderArgs ...interface{}) revel.Result 
 	}
 }
 
-func (lc *LayoutController) RenderTemplateWithLayout(templatePath string) revel.Result {
+func (lc *Controller) RenderTemplateWithLayout(templatePath string) revel.Result {
 	if layoutTemplates == nil {
 		err := loadLayouts()
 		if err != nil {
@@ -146,17 +143,18 @@ func (lc *LayoutController) RenderTemplateWithLayout(templatePath string) revel.
 		Template:   template,
 		Layout:     layout,
 		RenderArgs: lc.RenderArgs,
+		RenderTmpl: map[string]revel.Template{},
 	}
 }
 
 func loadLayouts() *revel.Error {
-	layoutTemplates := revel.NewTemplateLoader([]string{filepath.Join(revel.BasePath, LayoutPath)})
+	layoutTemplates = revel.NewTemplateLoader([]string{filepath.Join(revel.BasePath, LayoutPath)})
 	return layoutTemplates.Refresh()
 }
 
 // Set a template from your main revel Template library to be rendered into
 // a named yield.
-func (lc *LayoutController) ContentFor(yieldName, templateName string) error {
+func (lc *Controller) ContentFor(yieldName, templateName string) error {
 	template, err := revel.MainTemplateLoader.Template(templateName)
 	if err != nil {
 		template, err = revel.MainTemplateLoader.Template(lc.Name + "/" + templateName)
