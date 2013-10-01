@@ -18,6 +18,8 @@ that is why you embed yield.Controller not controllers.Controller.
 The booking sample from revel was ported to use the basic yield
 mechanism and is available in the samples directory.
 
+Documentation is at godoc.org/github.com/acsellers/yield/app/controllers
+
 Bugs
 ----
 
