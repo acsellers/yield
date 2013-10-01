@@ -4,32 +4,6 @@ package routes
 import "github.com/robfig/revel"
 
 
-type tGorpController struct {}
-var GorpController tGorpController
-
-
-func (_ tGorpController) Begin(
-		) string {
-	args := make(map[string]string)
-	
-	return revel.MainRouter.Reverse("GorpController.Begin", args).Url
-}
-
-func (_ tGorpController) Commit(
-		) string {
-	args := make(map[string]string)
-	
-	return revel.MainRouter.Reverse("GorpController.Commit", args).Url
-}
-
-func (_ tGorpController) Rollback(
-		) string {
-	args := make(map[string]string)
-	
-	return revel.MainRouter.Reverse("GorpController.Rollback", args).Url
-}
-
-
 type tStatic struct {}
 var Static tStatic
 
@@ -59,15 +33,17 @@ func (_ tStatic) ServeModule(
 }
 
 
-type tJobs struct {}
-var Jobs tJobs
+type tController struct {}
+var Controller tController
 
 
-func (_ tJobs) Status(
+func (_ tController) RenderTemplateWithLayout(
+		templatePath string,
 		) string {
 	args := make(map[string]string)
 	
-	return revel.MainRouter.Reverse("Jobs.Status", args).Url
+	revel.Unbind(args, "templatePath", templatePath)
+	return revel.MainRouter.Reverse("Controller.RenderTemplateWithLayout", args).Url
 }
 
 
@@ -98,6 +74,44 @@ func (_ tTestRunner) List(
 	args := make(map[string]string)
 	
 	return revel.MainRouter.Reverse("TestRunner.List", args).Url
+}
+
+
+type tJobs struct {}
+var Jobs tJobs
+
+
+func (_ tJobs) Status(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("Jobs.Status", args).Url
+}
+
+
+type tGorpController struct {}
+var GorpController tGorpController
+
+
+func (_ tGorpController) Begin(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("GorpController.Begin", args).Url
+}
+
+func (_ tGorpController) Commit(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("GorpController.Commit", args).Url
+}
+
+func (_ tGorpController) Rollback(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("GorpController.Rollback", args).Url
 }
 
 

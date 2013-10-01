@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"github.com/acsellers/yield"
+	"github.com/acsellers/yield/app/controllers"
 	"github.com/robfig/revel"
 )
 

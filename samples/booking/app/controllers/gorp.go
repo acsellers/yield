@@ -3,7 +3,7 @@ package controllers
 import (
 	"code.google.com/p/go.crypto/bcrypt"
 	"database/sql"
-	"github.com/acsellers/yield"
+	"github.com/acsellers/yield/app/controllers"
 	"github.com/coopernurse/gorp"
 	_ "github.com/mattn/go-sqlite3"
 	r "github.com/robfig/revel"

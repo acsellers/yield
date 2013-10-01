@@ -5,16 +5,17 @@ import (
 	"flag"
 	"reflect"
 	"github.com/robfig/revel"
+	yield "github.com/acsellers/yield/app/controllers"
 	_ "github.com/acsellers/yield/samples/booking/app"
-	controllers "github.com/acsellers/yield/samples/booking/app/controllers"
+	controllers2 "github.com/acsellers/yield/samples/booking/app/controllers"
 	_ "github.com/acsellers/yield/samples/booking/app/jobs"
 	tests "github.com/acsellers/yield/samples/booking/tests"
 	_ "github.com/mattn/go-sqlite3"
 	controllers1 "github.com/robfig/revel/modules/jobs/app/controllers"
 	_ "github.com/robfig/revel/modules/jobs/app/jobs"
-	controllers0 "github.com/robfig/revel/modules/static/app/controllers"
+	controllers "github.com/robfig/revel/modules/static/app/controllers"
 	_ "github.com/robfig/revel/modules/testrunner/app"
-	controllers2 "github.com/robfig/revel/modules/testrunner/app/controllers"
+	controllers0 "github.com/robfig/revel/modules/testrunner/app/controllers"
 	models "github.com/robfig/revel/samples/booking/app/models"
 )
 
@@ -33,33 +34,7 @@ func main() {
 	revel.Init(*runMode, *importPath, *srcPath)
 	revel.INFO.Println("Running revel server")
 	
-	revel.RegisterController((*controllers.GorpController)(nil),
-		[]*revel.MethodType{
-			&revel.MethodType{
-				Name: "Begin",
-				Args: []*revel.MethodArg{ 
-				},
-				RenderArgNames: map[int][]string{ 
-				},
-			},
-			&revel.MethodType{
-				Name: "Commit",
-				Args: []*revel.MethodArg{ 
-				},
-				RenderArgNames: map[int][]string{ 
-				},
-			},
-			&revel.MethodType{
-				Name: "Rollback",
-				Args: []*revel.MethodArg{ 
-				},
-				RenderArgNames: map[int][]string{ 
-				},
-			},
-			
-		})
-	
-	revel.RegisterController((*controllers0.Static)(nil),
+	revel.RegisterController((*controllers.Static)(nil),
 		[]*revel.MethodType{
 			&revel.MethodType{
 				Name: "Serve",
@@ -83,22 +58,20 @@ func main() {
 			
 		})
 	
-	revel.RegisterController((*controllers1.Jobs)(nil),
+	revel.RegisterController((*yield.Controller)(nil),
 		[]*revel.MethodType{
 			&revel.MethodType{
-				Name: "Status",
+				Name: "RenderTemplateWithLayout",
 				Args: []*revel.MethodArg{ 
+					&revel.MethodArg{Name: "templatePath", Type: reflect.TypeOf((*string)(nil)) },
 				},
 				RenderArgNames: map[int][]string{ 
-					19: []string{ 
-						"entries",
-					},
 				},
 			},
 			
 		})
 	
-	revel.RegisterController((*controllers2.TestRunner)(nil),
+	revel.RegisterController((*controllers0.TestRunner)(nil),
 		[]*revel.MethodType{
 			&revel.MethodType{
 				Name: "Index",
@@ -132,7 +105,48 @@ func main() {
 			
 		})
 	
-	revel.RegisterController((*controllers.Application)(nil),
+	revel.RegisterController((*controllers1.Jobs)(nil),
+		[]*revel.MethodType{
+			&revel.MethodType{
+				Name: "Status",
+				Args: []*revel.MethodArg{ 
+				},
+				RenderArgNames: map[int][]string{ 
+					19: []string{ 
+						"entries",
+					},
+				},
+			},
+			
+		})
+	
+	revel.RegisterController((*controllers2.GorpController)(nil),
+		[]*revel.MethodType{
+			&revel.MethodType{
+				Name: "Begin",
+				Args: []*revel.MethodArg{ 
+				},
+				RenderArgNames: map[int][]string{ 
+				},
+			},
+			&revel.MethodType{
+				Name: "Commit",
+				Args: []*revel.MethodArg{ 
+				},
+				RenderArgNames: map[int][]string{ 
+				},
+			},
+			&revel.MethodType{
+				Name: "Rollback",
+				Args: []*revel.MethodArg{ 
+				},
+				RenderArgNames: map[int][]string{ 
+				},
+			},
+			
+		})
+	
+	revel.RegisterController((*controllers2.Application)(nil),
 		[]*revel.MethodType{
 			&revel.MethodType{
 				Name: "AddUser",
@@ -187,7 +201,7 @@ func main() {
 			
 		})
 	
-	revel.RegisterController((*controllers.Hotels)(nil),
+	revel.RegisterController((*controllers2.Hotels)(nil),
 		[]*revel.MethodType{
 			&revel.MethodType{
 				Name: "Index",
