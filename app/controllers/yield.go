@@ -1,3 +1,19 @@
+/*
+This library allows you to use yields and layouts similar to the Rails implementation for the current Revel template implementation.
+
+In your app.conf, add a line like
+module.yield=github.com/acsellers/yield
+
+Then instead of starting your controllers from *revel.Controller,
+you can import "github.com/acsellers/yield/app/controllers" and then
+use the struct yield.Controller to embed into your controllers.
+
+Note: the module in that import path is named yield not controllers, and
+that is why you embed yield.Controller not controllers.Controller.
+
+The booking sample from revel was ported to use the basic yield
+mechanism and is available in the samples directory.
+*/
 package yield
 
 import (
@@ -9,6 +25,13 @@ import (
 	"runtime"
 )
 
+/*
+To set your directory for loading layouts from, set the LayoutPath variable to the location
+relative to the base of your revel directory. You can only set one directory at the moment.
+
+To set a default layout, take the format you wish that layout to apply for, i.e. "html", then set
+that string to the name of the layout you want to render.
+*/
 var (
 	LayoutPath      = "app/layouts"
 	DefaultLayout   = make(map[string]string)
@@ -75,6 +98,11 @@ func init() {
 	}
 }
 
+/*
+You can embed this Controller into your controllers instead of *revel.Controller,
+note that unlike revel.Controller, you do not need to embed a pointer to this
+controller.
+*/
 type Controller struct {
 	*revel.Controller
 	RenderTmpl map[string]revel.Template
@@ -82,6 +110,14 @@ type Controller struct {
 	noLayout   bool
 }
 
+/*
+Set the layout to be rendered for the current action. Setting the layout
+to empty string will cause no layout to be rendered. No layout will be rendered
+if you did not set a Default layout for the current request format and you
+do not call this function to set a specific layout. You do not have to include
+the format for the template, that will be added, but adding it the format would
+not cause a problem.
+*/
 func (lc *Controller) Layout(s string) {
 	if s == "" {
 		lc.noLayout = true
@@ -90,6 +126,10 @@ func (lc *Controller) Layout(s string) {
 	}
 }
 
+/*
+The same kind of function as calling Render on revel.Controller, except that
+this will pick up the Layout you specified and render that as well.
+*/
 func (lc *Controller) Render(extraRenderArgs ...interface{}) revel.Result {
 	// Get the calling function name.
 	_, _, line, ok := runtime.Caller(1)
@@ -121,6 +161,12 @@ func (lc *Controller) Render(extraRenderArgs ...interface{}) revel.Result {
 	}
 }
 
+/*
+If you needed to use revel's RenderTemplate, this is similar, except it uses
+the Layout specified on the Controller. If you do not wish for a Layout to be
+rendered, you should use RenderTemplate which is available. This call expects
+an actual layout to be rendered, failing to provide one is an error.
+*/
 func (lc *Controller) RenderTemplateWithLayout(templatePath string) revel.Result {
 	if layoutTemplates == nil {
 		err := loadLayouts()
@@ -136,7 +182,10 @@ func (lc *Controller) RenderTemplateWithLayout(templatePath string) revel.Result
 	}
 	layout, err := layoutTemplates.Template(lc.LayoutPath)
 	if err != nil {
-		return lc.RenderError(err)
+		layout, err = layoutTemplates.Template(lc.LayoutPath + "." + lc.Request.Format)
+		if err != nil {
+			return lc.RenderError(err)
+		}
 	}
 
 	return &RenderLayoutTemplateResult{

@@ -12,6 +12,14 @@ import (
 	"strings"
 )
 
+/*
+This is the Result object passed to revel when you render
+a view with a Layout set. RenderTmpl is the Templates that
+were set with ContentFor. Layout is the set Layout. Otherwise
+it is the same as revel's RenderTemplateResult. This actually
+doesn't require a Layout to be set, not that its used with that
+functionality.
+*/
 type RenderLayoutTemplateResult struct {
 	Template   revel.Template
 	Layout     revel.Template
@@ -19,6 +27,8 @@ type RenderLayoutTemplateResult struct {
 	RenderTmpl map[string]revel.Template
 }
 
+// Render the Templates into the Response, handles errors and panics using the
+// same mechanisms of revel.
 func (r *RenderLayoutTemplateResult) Apply(req *revel.Request, resp *revel.Response) {
 	// Handle panics when rendering templates.
 	defer func() {
