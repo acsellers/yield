@@ -3,7 +3,7 @@ package yield
 import (
 	"bytes"
 	"fmt"
-	"github.com/robfig/revel"
+	"github.com/revel/revel"
 	"io"
 	"io/ioutil"
 	"net/http"

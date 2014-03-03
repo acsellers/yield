@@ -19,7 +19,7 @@ package yield
 import (
 	"bytes"
 	"fmt"
-	"github.com/robfig/revel"
+	"github.com/revel/revel"
 	htmlTmpl "html/template"
 	"path/filepath"
 	"runtime"
